@@ -52,7 +52,7 @@ A exploração da Camada Analítica revelou padrões comportamentais claros:
 ## 🚀 Como Executar
 
 1.  Clone este repositório.
-2.  Acesse o notebook `case_itau_analytics_engineer.ipynb` (link abaixo).
+2.  Acesse o notebook `case_itau_ea.ipynb` (link abaixo).
 3.  Faça o upload dos arquivos `.csv` do Kaggle para o seu Google Drive.
 4.  Ajuste a variável `caminho_base` no primeiro bloco de código para apontar para a sua pasta.
 5.  Execute as células sequencialmente. O arquivo `obt_credit_risk_features.parquet` (e `.csv`) será gerado na última etapa.
