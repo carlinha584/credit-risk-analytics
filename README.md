@@ -12,6 +12,20 @@ Para garantir reprodutibilidade, escalabilidade e velocidade sem a necessidade d
   * **Motor de Processamento (OLAP):** DuckDB (Processamento in-memory em SQL otimizado para cargas analíticas).
   * **Visualização:** Looker Studio (Conectado via `.csv` exportado da base final).
 
+    ### Fluxo de Dados (Data Flow)
+```mermaid
+graph LR
+    A[(Arquivos CSV)] -->|DuckDB In-Memory| B(Camada Raw)
+    B -->|Limpeza e Imputação| C(Camada Staging)
+    C -->|Joins e Agregações| D(Camada Intermediate)
+    D -->|Feature Engineering| E[(OBT - Gold)]
+    E -->|Export .parquet / .csv| F[Looker Studio]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style E fill:#ff9,stroke:#333,stroke-width:2px
+    style F fill:#bbf,stroke:#333,stroke-width:2px
+```
+
 ## 🏗️ Modelagem de Dados
 
 O pipeline foi desenhado inspirado na arquitetura *Medallion*, progredindo de um Data Lake bruto para um Data Mart modelado.
@@ -30,6 +44,11 @@ Durante o desenvolvimento, priorizei a qualidade dos dados e a geração de vari
   * **Tratamento de Anomalias:** A coluna `DAYS_EMPLOYED` possuía \~18% da base com o valor `365243` (anomalia de sistema para não-aplicáveis/aposentados). Esse "magic number" foi convertido para `NULL` para evitar distorções graves em modelos de ML.
   * **Feature Engineering:** Criação de variáveis como `ANNUITY_INCOME_RATIO` (comprometimento de renda) e contagem de aprovações/recusas passadas.
   * **Tratamento de Clientes Novos:** Uso estratégico de `LEFT JOIN` seguido de `COALESCE` na construção da OBT para garantir que clientes sem histórico de crédito não fossem descartados, assumindo valor `0` para métricas de histórico.
+
+    ### 🧠 Camada Semântica e Qualidade
+* **Cross-Features:** Criação de variáveis preditivas compostas, como o `ANNUITY_INCOME_RATIO`, cruzando dados de anuidade e renda para determinar a capacidade real de pagamento.
+* **Camada Semântica (DataViz):** A padronização de métricas (agregações de risco) e a tradução de regras de negócio em dimensões amigáveis (ex: faixas de atraso e faixas de comprometimento) foram isoladas na camada semântica do Looker Studio, garantindo que o usuário de negócios consuma conceitos padronizados.
+* **Data Contracts (Qualidade):** Implementação de testes automatizados via SQL no final do pipeline para garantir expectativas críticas como unicidade da chave primária prevenindo *fan-out* nos joins e completude da variável resposta `TARGET`.
     
 ## 📖 Dicionário de Features Derivadas (Engenharia de Variáveis)
 Além das métricas básicas sugeridas, o pipeline focou na criação de variáveis preditivas de alto valor analítico baseadas no comportamento histórico e capacidade de pagamento:
