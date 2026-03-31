@@ -92,5 +92,5 @@ A exploração da Camada Analítica revelou padrões comportamentais claros:
 
 ## 🔗 Links Úteis
 
-  * **[Dashboard Interativo (Looker Studio) - Insights de Inadimplência]([https://lookerstudio.google.com/s/jr8hKzingIs](https://lookerstudio.google.com/reporting/63746bbb-de41-4d7b-b75d-b686bd8e4536))**
+  * **[Dashboard Interativo (Looker Studio) - Insights de Inadimplência](https://lookerstudio.google.com/reporting/63746bbb-de41-4d7b-b75d-b686bd8e4536)**
   * **[Notebook Google Colab com o Pipeline Completo](https://colab.research.google.com/drive/160lvY7-tf_BWfJ79VNNS5eyst1rq7Sl7?usp=sharing)**
